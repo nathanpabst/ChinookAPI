@@ -2,18 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ChinookAPI.Models;
+using System.Data.SqlClient;
 
 namespace ChinookAPI.DataAccess
 {
     public class InvoiceStorage
     {
-        private const string ConnectionString = "Server=(local);Database=ChinookAPI;Trusted_Connection=True;";
-        public Invoice GetById(int id)
+        static List<Invoice> _invoices = new List<Invoice>();
+
+        public List<Invoice> GetInvoices()
         {
-            using (var connection = new SqlConnection(ConnectionString))
+            using (var connection = new SqlConnection("Server=(local);Database=ChinookAPI;Trusted_Connection=True;"))
             {
 
             }
+            return _invoices;
         }
     }
 }
