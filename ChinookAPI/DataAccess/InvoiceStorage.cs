@@ -13,7 +13,7 @@ namespace ChinookAPI.DataAccess
     {
         static List<Invoice> _invoices = new List<Invoice>();
 
-        private const string ConnectionString = "Server=(local);Database=ChinookAPI;Trusted_Connection=True;";
+        private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=Chinook;Trusted_Connection=True;";
 
         public List<Invoice> GetInvoices()
         {
@@ -30,7 +30,7 @@ namespace ChinookAPI.DataAccess
                                        FROM Employee as e
                                             inner join Customer as c ON c.SupportRepId = e.EmployeeId
                                             inner join Invoice as i ON i.CustomerId = c.CustomerId";
-            var reader = command.ExecuteReader();
+                var reader = command.ExecuteReader();
 
                 while (reader.Read())
                 {
