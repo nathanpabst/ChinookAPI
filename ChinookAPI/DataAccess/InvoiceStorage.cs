@@ -16,34 +16,8 @@ namespace ChinookAPI.DataAccess
 
         private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=Chinook;Trusted_Connection=True;";
 
-        public List<SalesAgent> GetInvoiceCountByRep()
-        {
-            using (var connection = new SqlConnection(ConnectionString))
-            {
-                connection.Open();
 
-                var command = connection.CreateCommand();
-                command.CommandText = @"SELECT 
-	                                        [Agent Name] = e.FirstName + ' ' + e.LastName,
-	                                        [Invoice Id] = i.InvoiceId
-                                        FROM Employee as e
-                                            inner join Customer as c ON c.SupportRepId = e.EmployeeId
-                                            inner join Invoice as i ON i.CustomerId = c.CustomerId";
-                var reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    var agent = new SalesAgent
-                    {
-                        AgentName = reader["Agent Name"].ToString(),
-                        InvoiceId = (int)reader["Invoice Id"]
-                    };
-                    _agents.Add(agent);
-                }
-            }
-            return _agents;
-        }
-
+        //Provide an endpoint that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices.
         public List<Invoice> GetInvoices()
         {
             using (var connection = new SqlConnection(ConnectionString))
@@ -63,7 +37,7 @@ namespace ChinookAPI.DataAccess
 
                 while (reader.Read())
                 {
-                    var invoice = new Invoice
+                    var invoice = new Invoice()
                     {
                         //the names in the square brackets should match the field names from the query results
                         SalesAgent = reader["Sales Agent"].ToString(),
@@ -73,8 +47,37 @@ namespace ChinookAPI.DataAccess
                     };
                     _invoices.Add(invoice);
                 }
+                return _invoices;
             }
-            return _invoices;
+        }
+
+        //Provide an endpoint that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices.
+        public List<SalesAgent> GetInvoicesByRep()
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                var command = connection.CreateCommand();
+                command.CommandText = @"SELECT 
+	                                        [Agent Name] = e.FirstName + ' ' + e.LastName,
+	                                        [Invoice Id] = i.InvoiceId
+                                        FROM Employee as e
+                                            inner join Customer as c ON c.SupportRepId = e.EmployeeId
+                                            inner join Invoice as i ON i.CustomerId = c.CustomerId";
+                var reader = command.ExecuteReader();
+
+                while (reader.Read())
+                {
+                    var agent = new SalesAgent()
+                    {
+                        AgentName = reader["Agent Name"].ToString(),
+                        InvoiceId = (int)reader["Invoice Id"]
+                    };
+                    _agents.Add(agent);
+                }
+            }
+            return _agents;
         }
     }
 }

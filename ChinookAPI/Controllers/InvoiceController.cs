@@ -23,9 +23,9 @@ namespace ChinookAPI.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetInvoiceCountByRep()
+        public IActionResult GetInvoicesByRep()
         {
-            return Ok(_agents.GetInvoiceCountByRep());
+            return Ok(_agents.GetInvoicesByRep());
         }
     }
 }
