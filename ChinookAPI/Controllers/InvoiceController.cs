@@ -9,8 +9,9 @@ using ChinookAPI.Models;
 
 namespace ChinookAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
+    [Route("api/controller")]
     public class InvoiceController : ControllerBase
     {
         InvoiceStorage _invoices = new InvoiceStorage();
