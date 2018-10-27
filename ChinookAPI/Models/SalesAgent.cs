@@ -11,3 +11,4 @@ namespace ChinookAPI.Models
         public int InvoiceId { get; set; }
     }
 }
+

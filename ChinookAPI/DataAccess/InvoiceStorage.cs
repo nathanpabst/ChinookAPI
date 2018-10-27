@@ -74,14 +74,7 @@ namespace ChinookAPI.DataAccess
                     {
                         AgentName = reader["Agent Name"].ToString(),
                         InvoiceId = (int)reader["InvoiceId"],
-                        CustomerId = (int)reader["CustomerId"],
-                        InvoiceDate = (DateTime)reader["InvoiceDate"],
-                        BillingAddress = reader["BillingAddress"].ToString(),
-                        BillingCity = reader["BillingCity"].ToString(),
-                        BillingState = reader["BillingState"].ToString(),
-                        BillingCountry = reader["BillingCountry"].ToString(),
-                        BillingPostalCode = reader["BillingPostalCode"].ToString(),
-                        Total = (decimal)reader["Total"]
+                        
                     };
                     _agents.Add(agent);
                 }

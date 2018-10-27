@@ -17,13 +17,13 @@ namespace ChinookAPI.Controllers
         InvoiceStorage _invoices = new InvoiceStorage();
         InvoiceStorage _agents = new InvoiceStorage();
 
-        [HttpGet]
+        [HttpGet("invoices")]
         public IActionResult GetInvoices()
         {
             return Ok(_invoices.GetInvoices());
         }
 
-        [HttpGet]
+        [HttpGet("invoicesByRep")]
         public IActionResult GetInvoicesByRep()
         {
             return Ok(_agents.GetInvoicesByRep());
