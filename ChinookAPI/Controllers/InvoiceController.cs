@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ChinookAPI.DataAccess;
 using ChinookAPI.Models;
+using Microsoft.Extensions.Configuration;
 
 namespace ChinookAPI.Controllers
 {
@@ -14,8 +15,16 @@ namespace ChinookAPI.Controllers
     [Route("api/controller")]
     public class InvoiceController : ControllerBase
     {
-        InvoiceStorage _invoices = new InvoiceStorage();
-        InvoiceStorage _agents = new InvoiceStorage();
+        private readonly InvoiceStorage _invoices;
+        private readonly InvoiceStorage _agents; 
+
+        public InvoiceController(IConfiguration config)
+        {
+         _agents = new InvoiceStorage(config);
+         _invoices = new InvoiceStorage(config);
+
+        }
+
 
         [HttpGet("invoices")]
         public IActionResult GetInvoices()

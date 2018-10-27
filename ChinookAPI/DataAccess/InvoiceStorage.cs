@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using ChinookAPI.Models;
 using System.Data.SqlClient;
-
-
+using Microsoft.Extensions.Configuration;
+using Dapper;
 
 namespace ChinookAPI.DataAccess
 {
@@ -14,40 +14,32 @@ namespace ChinookAPI.DataAccess
         static List<Invoice> _invoices = new List<Invoice>();
         static List<SalesAgent> _agents = new List<SalesAgent>();
 
-        private const string ConnectionString = @"Server=.\SQLEXPRESS;Database=Chinook;Trusted_Connection=True;";
+        private readonly string ConnectionString;
 
+        public InvoiceStorage(IConfiguration config)
+        {
+            ConnectionString = config.GetSection("ConnectionString").Value;
+        }
 
-        //2) Provide an endpoint that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices.
+        //3) Looking at the InvoiceLine table, provide an endpoint that COUNTs the number of line items for an Invoice with a parameterized Id from user input
+
+        //2) USING DAPPER..Provide an endpoint that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices.
         public List<Invoice> GetInvoices()
         {
             using (var connection = new SqlConnection(ConnectionString))
             {
                 connection.Open();
 
-                var command = connection.CreateCommand();
-                command.CommandText = @"SELECT 
-                                            [Sales Agent] = e.FirstName + ' ' + e.LastName,
-                                            [Customer Name] = c.FirstName + ' ' + c.LastName,
-                                            [Country] = i.BillingCountry,
-                                            [Invoice Amount] = i.Total
-                                       FROM Employee as e
-                                            inner join Customer as c ON c.SupportRepId = e.EmployeeId
-                                            inner join Invoice as i ON i.CustomerId = c.CustomerId";
-                var reader = command.ExecuteReader();
+                var result2 = connection.Query<Invoice>(@"SELECT 
+                                           SalesAgent = e.FirstName + ' ' + e.LastName,
+                                           CustomerName = c.FirstName + ' ' + c.LastName,
+                                           Country = i.BillingCountry,
+                                           InvoiceAmt = i.Total
+                                           FROM Employee as e
+                                           inner join Customer as c ON c.SupportRepId = e.EmployeeId
+                                           inner join Invoice as i ON i.CustomerId = c.CustomerId");
 
-                while (reader.Read())
-                {
-                    var invoice = new Invoice()
-                    {
-                        //the names in the square brackets should match the field names from the query results
-                        SalesAgent = reader["Sales Agent"].ToString(),
-                        CustomerName = reader["Customer Name"].ToString(),
-                        Country = reader["Country"].ToString(),
-                        InvoiceAmt = (decimal)reader["Invoice Amount"]
-                    };
-                    _invoices.Add(invoice);
-                }
-                return _invoices;
+                return result2.ToList();
             }
         }
 
@@ -59,27 +51,15 @@ namespace ChinookAPI.DataAccess
             {
                 connection.Open();
 
-                var command = connection.CreateCommand();
-                command.CommandText = @"SELECT                                
-	                                        [Agent Name] = e.FirstName + ' ' + e.LastName,
+                var result1 = connection.Query<SalesAgent>(@"SELECT                                
+	                                        AgentName = e.FirstName + ' ' + e.LastName,
                                             i.*
                                         FROM Employee as e
                                             inner join Customer as c ON c.SupportRepId = e.EmployeeId
-                                            inner join Invoice as i ON i.CustomerId = c.CustomerId";
-                var reader = command.ExecuteReader();
-
-                while (reader.Read())
-                {
-                    var agent = new SalesAgent()
-                    {
-                        AgentName = reader["Agent Name"].ToString(),
-                        InvoiceId = (int)reader["InvoiceId"],
-                        
-                    };
-                    _agents.Add(agent);
-                }
+                                            inner join Invoice as i ON i.CustomerId = c.CustomerId");
+                return result1.ToList();
+                
             }
-            return _agents;
         }
     }
 }
