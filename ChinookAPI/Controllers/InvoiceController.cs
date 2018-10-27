@@ -25,17 +25,27 @@ namespace ChinookAPI.Controllers
 
         }
 
-
+        // #1
         [HttpGet("invoices")]
         public IActionResult GetInvoices()
         {
             return Ok(_invoices.GetInvoices());
         }
 
+        // #2
         [HttpGet("invoicesByRep")]
         public IActionResult GetInvoicesByRep()
         {
             return Ok(_agents.GetInvoicesByRep());
         }
+
+        // #3
+        [HttpGet("invoiceByLineItems/{id}")]
+        public IActionResult GetLineItems(int id)
+        {
+            return Ok(_invoices.GetLineItems(id));
+        }
+
+
     }
 }

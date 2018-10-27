@@ -21,7 +21,20 @@ namespace ChinookAPI.DataAccess
             ConnectionString = config.GetSection("ConnectionString").Value;
         }
 
-        //3) Looking at the InvoiceLine table, provide an endpoint that COUNTs the number of line items for an Invoice with a parameterized Id from user input
+        //3) Looking at the InvoiceLine table, provide an endpoint that COUNTs 
+        //the number of line items for an Invoice with a parameterized Id from user input
+
+        public int GetLineItems(int id)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+
+                string lineItems = "SELECT COUNT(*) FROM InvoiceLine WHERE InvoiceId = @id";
+                return connection.QueryFirst<int>(lineItems, new { id = id });
+            }
+
+        }
 
         //2) USING DAPPER..Provide an endpoint that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices.
         public List<Invoice> GetInvoices()
