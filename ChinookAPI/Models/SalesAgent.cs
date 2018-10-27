@@ -7,8 +7,8 @@ namespace ChinookAPI.Models
 {
     public class SalesAgent
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string AgentName { get; set; }
         public int InvoiceId { get; set; }
     }
 }
+

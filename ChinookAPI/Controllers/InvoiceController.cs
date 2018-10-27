@@ -9,16 +9,24 @@ using ChinookAPI.Models;
 
 namespace ChinookAPI.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
+    //[Route("api/[controller]")]
+    //[ApiController]
+    [Route("api/controller")]
     public class InvoiceController : ControllerBase
     {
         InvoiceStorage _invoices = new InvoiceStorage();
+        InvoiceStorage _agents = new InvoiceStorage();
 
-        [HttpGet]
+        [HttpGet("invoices")]
         public IActionResult GetInvoices()
         {
             return Ok(_invoices.GetInvoices());
+        }
+
+        [HttpGet("invoicesByRep")]
+        public IActionResult GetInvoicesByRep()
+        {
+            return Ok(_agents.GetInvoicesByRep());
         }
     }
 }
