@@ -16,12 +16,14 @@ namespace ChinookAPI.Controllers
     public class InvoiceController : ControllerBase
     {
         private readonly InvoiceStorage _invoices;
-        private readonly InvoiceStorage _agents; 
+        private readonly InvoiceStorage _agents;
+        private readonly InvoiceStorage _insertInvoice;
 
         public InvoiceController(IConfiguration config)
         {
-         _agents = new InvoiceStorage(config);
-         _invoices = new InvoiceStorage(config);
+            _agents = new InvoiceStorage(config);
+            _invoices = new InvoiceStorage(config);
+            _insertInvoice = new InvoiceStorage(config);
 
         }
 
@@ -48,9 +50,9 @@ namespace ChinookAPI.Controllers
 
         // #4
         [HttpPost("addInvoice")]
-        public IActionResult PostInvoice(Invoice invoice)
+        public IActionResult PostInvoice(NewInvoice newInvoice)
         {
-            var success = _invoices.AddInvoice(1, "1234 Main St.");
+            var success = _insertInvoice.PostInvoice(1, "1234 Main St.");
             if (success)
             {
                 return Ok();
