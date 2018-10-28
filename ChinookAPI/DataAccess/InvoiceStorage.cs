@@ -21,6 +21,19 @@ namespace ChinookAPI.DataAccess
             ConnectionString = config.GetSection("ConnectionString").Value;
         }
 
+        //5) Provide a new endpoint to UPDATE an Employee's name with a parameter 
+        //for Employee Id and new name
+        public bool UpdateEmployeeName(int employeeId, string firstName, string lastName)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open();
+                string sql = "UPDATE Employee SET FirstName = @firstName, LastName = @lastName WHERE EmployeeId = @employeeId";
+                var result5 = connection.Execute(sql, new { EmployeeId = employeeId, FirstName = firstName, LastName = lastName });
+                return result5 == 1;
+            }
+        }
+
         //4) Provide a new endpoint to INSERT a new invoice with parameters 
         //for customerid and billing address
         public bool PostInvoice(int customerId, string billingAddress )

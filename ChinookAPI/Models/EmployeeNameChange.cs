@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 
 namespace ChinookAPI.Models
 {
-    public class SalesAgent
+    public class EmployeeNameChange
     {
-        public string AgentName { get; set; }
-        public int InvoiceId { get; set; }
         public int EmployeeId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }
-

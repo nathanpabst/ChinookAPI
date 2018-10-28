@@ -18,12 +18,14 @@ namespace ChinookAPI.Controllers
         private readonly InvoiceStorage _invoices;
         private readonly InvoiceStorage _agents;
         private readonly InvoiceStorage _insertInvoice;
+        private readonly InvoiceStorage _updateEmpName;
 
         public InvoiceController(IConfiguration config)
         {
             _agents = new InvoiceStorage(config);
             _invoices = new InvoiceStorage(config);
             _insertInvoice = new InvoiceStorage(config);
+            _updateEmpName = new InvoiceStorage(config);
 
         }
 
@@ -60,6 +62,21 @@ namespace ChinookAPI.Controllers
             else
             {
                 return BadRequest(new { Message = "Invoice was not added." });
+            }
+        }
+
+        // #5
+        [HttpPut("updateName")]
+        public IActionResult UpdateAgentName(EmployeeNameChange newName)
+        {
+            var success = _updateEmpName.UpdateEmployeeName(1, "bob", "loblaw");
+            if (success)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(new { Message = "Name change was unsuccessful." });
             }
         }
 
