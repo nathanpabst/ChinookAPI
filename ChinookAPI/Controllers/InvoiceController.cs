@@ -46,6 +46,20 @@ namespace ChinookAPI.Controllers
             return Ok(_invoices.GetLineItems(id));
         }
 
+        // #4
+        [HttpPost("addInvoice")]
+        public IActionResult PostInvoice(Invoice invoice)
+        {
+            var success = _invoices.AddInvoice(1, "1234 Main St.");
+            if (success)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(new { Message = "Invoice was not added." });
+            }
+        }
 
     }
 }

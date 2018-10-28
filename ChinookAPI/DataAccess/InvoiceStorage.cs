@@ -21,6 +21,19 @@ namespace ChinookAPI.DataAccess
             ConnectionString = config.GetSection("ConnectionString").Value;
         }
 
+        //4) Provide a new endpoint to INSERT a new invoice with parameters 
+        //for customerid and billing address
+        public bool AddInvoice(int customerId, string billingAddress)
+        {
+            using (var connection = new SqlConnection(ConnectionString))
+            {
+                connection.Open(); 
+                string newInvoice = "INSERT INTO Invoice(CustomerId, BillingAddress) VALUES(@CustomerId, @BillingAddress)";
+                var result4 = connection.Execute(newInvoice, new { customerId = customerId, BillingAddress = billingAddress });
+                return result4 == 1;
+            }
+        }
+
         //3) Looking at the InvoiceLine table, provide an endpoint that COUNTs 
         //the number of line items for an Invoice with a parameterized Id from user input
 
@@ -74,5 +87,6 @@ namespace ChinookAPI.DataAccess
                 
             }
         }
+
     }
 }
